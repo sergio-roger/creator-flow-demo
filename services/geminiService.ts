@@ -1,9 +1,12 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-
 export const generateVideoIdeas = async (niche: string) => {
+  if (!process.env.API_KEY) {
+    return Promise<void>;
+  }
+
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
@@ -18,13 +21,13 @@ export const generateVideoIdeas = async (niche: string) => {
               title: { type: Type.STRING },
               description: { type: Type.STRING },
               priority: { type: Type.STRING },
-              tags: { 
+              tags: {
                 type: Type.ARRAY,
-                items: { type: Type.STRING }
+                items: { type: Type.STRING },
               },
             },
-            required: ["title", "description", "priority", "tags"]
-          }
+            required: ["title", "description", "priority", "tags"],
+          },
         },
       },
     });
